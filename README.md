@@ -7,6 +7,12 @@ obelisk server.
 Will post a web service signing with gpg to notify
 changes so web services can keep accounting.
 
+Dependencies:
+----------------
+
+* python-twisted-web
+* python-obelisk
+
 --
 
 - unsystem dev
