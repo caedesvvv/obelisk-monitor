@@ -13,7 +13,11 @@ class Monitor(obelisk.ObeliskOfLightClient):
         obelisk.ObeliskOfLightClient.__init__(self, *args)
         self.load_addresses('addresses.txt')
 
-    def print_history(self, ec, history, address):
+    ##############################################
+    # Initial history
+
+    def parse_history(self, ec, history, address):
+        """Receive history for an address from the server"""
         total = 0
         for row in history:
             o_hash, o_index, o_height, value, s_hash, s_index, s_height = row
@@ -23,19 +27,24 @@ class Monitor(obelisk.ObeliskOfLightClient):
             print address, to_btc(total)
         self._addresses[address] = total
 
+    ##############################################
+    # Loading addresses
+
     def load_address(self, address):
-        def _print_history(_ec, _history):
+        """Load history for an address and subscribe afterwards"""
+        def _on_history(_ec, _history):
             self.naddresses -= 1
-            self.print_history(_ec, _history, address)
+            self.parse_history(_ec, _history, address)
             if self.naddresses == 0:
                 self.subscribe_addresses(self.file_name)
             if self.naddresses % 1000 == 0:
                 print "loaded", 10000-self.naddresses
             
         self.naddresses += 1
-        self.fetch_history(address, _print_history)
+        self.fetch_history(address, _on_history)
 
     def load_addresses(self, file_name):
+        """Load addresses from file"""
         self.file_name = file_name
         i = 0
         f = open(file_name, 'r')
@@ -46,18 +55,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
                 print 'loading',i
         f.close()
 
-    def on_address_update(self, address_version, address_hash, height, block_hash, raw_tx):
-        address = obelisk.bitcoin.hash_160_to_bc_address(address_hash, address_version), height
-        print "update for address", address[0]
-        tx = obelisk.bitcoin.Transaction(raw_tx.encode('hex'))
-        print "  inputs", len(tx.inputs), tx.inputs[0]['address']
-        for output in tx.outputs:
-            print " - output", output
-            if address[0] == output[0]:
-                print "  output", output[1]
-
-
     def subscribe_addresses(self, file_name):
+        """subscribe addresses from file"""
         i = 0
         f = open(file_name, 'r')
         for address in f.readlines():
@@ -68,7 +67,26 @@ class Monitor(obelisk.ObeliskOfLightClient):
         f.close()
 
 
+    ##############################################
+    # Receiving address updates
+
+    def on_address_update(self, address_version, address_hash, height, block_hash, raw_tx):
+        """Callback for address update, receives transactions relevant to the address."""
+        address = obelisk.bitcoin.hash_160_to_bc_address(address_hash, address_version), height
+        print "update for address", address[0]
+        tx = obelisk.bitcoin.Transaction(raw_tx.encode('hex'))
+        print "  inputs", len(tx.inputs), tx.inputs[0]['address']
+        for output in tx.outputs:
+            print " - output", output
+            if address[0] == output[0]:
+                print "  output", output[1]
+
+
+    ##############################################
+    # Post to web service
+
     def balance_changed(self, address, balances):
+        """Notify external service about changes to an address"""
         if balances == [0, 0]:
            return
         timestamp = time.time()
@@ -89,10 +107,16 @@ class Monitor(obelisk.ObeliskOfLightClient):
             print "error posting to server!"
         print "sent request"
 
+
+    ##############################################
+    # ZMQ Channel
+
     def on_raw_block(self, height, hash, header, tx_num, tx_hashes):
+        """Raw callback for the block zmq channel"""
         print "* block", height, len(tx_hashes)
 
     def on_raw_transaction(self, hash, transaction):
+        """Raw callback for the transaction zmq channel"""
         tx = obelisk.serialize.deser_tx(transaction)
         outputs = []
         for output in tx.outputs:
@@ -101,7 +125,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         print "* tx", hash.encode('hex'), ", ".join(outputs), dir(tx)
  
 if __name__ == '__main__':
-    c = Monitor('tcp://85.25.198.97:8081', 'tcp://85.25.198.97:8083')
+    c = Monitor('tcp://85.25.198.97:9091', 'tcp://85.25.198.97:9093')
     # some popular addresses for testing subscription
     c.subscribe_address("1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp", c.on_address_update)
     c.subscribe_address("1dice97ECuByXAvqXpaYzSaQuPVvrtmz6", c.on_address_update)
