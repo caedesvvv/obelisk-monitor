@@ -1,17 +1,25 @@
+####################################################
+# Obelisk based monitor daemon for easily linking to web services.
+#
+# Listens for changes to a list of addresses and notifies a given web service
+# with updates containing confirmed and unconfirmed transactions for each of
+# them.
+
 import obelisk
 
 from twisted.internet import reactor
 from obelisk.util import to_btc
 
-####################################################
-# Testing Code
+##############################################
+# Service class
 
 class Monitor(obelisk.ObeliskOfLightClient):
     def __init__(self, *args):
         self.naddresses = 0
         self._addresses = {}
         obelisk.ObeliskOfLightClient.__init__(self, *args)
-        self.load_addresses('addresses.txt')
+        self.file_name = 'addresses.txt'
+        self.load_addresses(self.file_name)
 
     ##############################################
     # Initial history
@@ -45,11 +53,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
 
     def load_addresses(self, file_name):
         """Load addresses from file"""
-        self.file_name = file_name
-        i = 0
         f = open(file_name, 'r')
-        for address in f.readlines():
-            i+=1
+        for i, address in enumerate(f.readlines()):
             self.load_address(address.strip())
             if i%1000 == 0:
                 print 'loading',i
@@ -57,10 +62,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
 
     def subscribe_addresses(self, file_name):
         """subscribe addresses from file"""
-        i = 0
         f = open(file_name, 'r')
-        for address in f.readlines():
-            i+=1
+        for i, address in enumerate(f.readlines()):
             self.subscribe_address(address.strip(), self.on_address_update)
             if i%1000 == 0:
                 print 'subscribed',i
