@@ -89,6 +89,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
                 self._addresses[address].add_output(o_hash.encode('hex'), o_height, value)
         if self._addresses[address].balance > 0:
             print address, to_btc(self._addresses[address].balance), self._addresses[address]
+            # bootstrap notification in case we missed anything
+            self.balance_changed(address, [self._addresses[address].get_balance(), self._addresses[address].get_unconfirmed()])
 
     ##############################################
     # Loading addresses
