@@ -16,6 +16,11 @@ Modify the following variables in config.json:
  * url: url to post for notifications
  * key_id: key id to use for signing posts
 
+Other optional config options:
+ * address_file: file to read for addresses (defaults to addresses.txt)
+ * command_url: obelisk command url (something like tcp://85.25.198.97:8081)
+ * block_url: obelisk block url (something like tcp://85.25.198.97:8083)
+
 Running main.py will start the monitor.
 
 How it works:
