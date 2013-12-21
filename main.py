@@ -5,6 +5,8 @@
 # with updates containing confirmed and unconfirmed transactions for each of
 # them.
 
+import time
+
 import obelisk
 
 from twisted.internet import reactor
