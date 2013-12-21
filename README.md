@@ -36,9 +36,9 @@ Dependencies:
 
 * python-twisted-web
 * python-pyme
-* python-zmqproto (https://github.com/caedesvvv/zmqproto)
-* python-obelisk (https://github.com/darkwallet/python-obelisk)
-* python-ecdsa (https://github.com/warner/python-ecdsa)
+* [python-zmqproto](https://github.com/caedesvvv/zmqproto)
+* [python-obelisk](https://github.com/darkwallet/python-obelisk)
+* [python-ecdsa](https://github.com/warner/python-ecdsa)
 
 --
 
