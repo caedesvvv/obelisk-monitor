@@ -12,7 +12,7 @@ to monitor on each line.
 Provided is a script 'genaddresses.py' you can use to generate
 a list of 10K addresses from an mpk.
 
-Modify the following variables in main.py:
+Modify the following variables in config.json:
  * url: url to post for notifications
  * key_id: key id to use for signing posts
 
