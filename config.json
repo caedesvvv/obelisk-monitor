@@ -1,2 +1,5 @@
 {"url": "http://localhost:8080/privateapi/update_balance",
- "key_id": "FFFFFFFF"}
+ "key_id": "FFFFFFFF",
+ "command_url": "tcp://85.25.198.97:8081",
+ "block_url": "tcp://85.25.198.97:8083",
+ "address_file": "addresses.txt"}
