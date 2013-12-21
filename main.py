@@ -54,8 +54,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
     def __init__(self, *args):
         self.naddresses = 0
         self._addresses = {}
-        obelisk.ObeliskOfLightClient.__init__(self, *args)
         self.load_config()
+        obelisk.ObeliskOfLightClient.__init__(self, self.command_url, self.block_url)
         self.load_addresses(self.file_name)
 
 
@@ -64,7 +64,6 @@ class Monitor(obelisk.ObeliskOfLightClient):
 
     def load_config(self):
         """Load configuration from config.json"""
-        self.file_name = 'addresses.txt'
         try:
             f = open('config.json')
             config = json.load(f)
@@ -74,6 +73,9 @@ class Monitor(obelisk.ObeliskOfLightClient):
             config = {}
         self.key_id = str(config.get('key_id', 'FFFFFFFF'))
         self.url = str(config.get('url', ''))
+        self.file_name = str(config.get('address_file', 'addresses.txt'))
+        self.command_url = str(config.get('command_url', 'tcp://85.25.198.97:8081'))
+        self.block_url = str(config.get('block_url', 'tcp://85.25.198.97:8083'))
         if not self.key_id == 'FFFFFFFF':
             print "using gpg key", cypher.get_fingerprint(self.key_id)
 
@@ -194,7 +196,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         print "* tx", hash.encode('hex'), ", ".join(outputs), dir(tx)
  
 if __name__ == '__main__':
-    c = Monitor('tcp://85.25.198.97:9091', 'tcp://85.25.198.97:9093')
+    c = Monitor()
     # some popular addresses for testing subscription
     if '--test' in sys.argv:
         print "Loading test addresses"
