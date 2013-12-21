@@ -13,6 +13,7 @@ from twisted.internet import reactor
 import obelisk
 from obelisk.util import to_btc
 
+import cypher
 
 # Address History
 class AddressHistory(object):
