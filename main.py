@@ -141,6 +141,9 @@ class Monitor(obelisk.ObeliskOfLightClient):
                 'balance': balances[0],
                 'balance2': balances[1],
                 'address': address}
+        if key_id == 'FFFFFFFF':
+            print "Configure key_id and url to post to webservice"
+            return
         data = json.dumps(args)
         signed = cypher.sign_text(data, key_id)
         args = urllib.urlencode({'data': signed})
