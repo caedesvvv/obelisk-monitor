@@ -72,7 +72,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         self.key_id = str(config.get('key_id', 'FFFFFFFF'))
         self.url = str(config.get('url', ''))
         if not self.key_id == 'FFFFFFFF':
-            print "using gpg key", cypher.get_fingerprint(key_id)
+            print "using gpg key", cypher.get_fingerprint(self.key_id)
 
     ##############################################
     # Initial history
