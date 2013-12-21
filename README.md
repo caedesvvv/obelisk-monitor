@@ -31,6 +31,14 @@ channels, one for history and another for block notifications.
 Will post to a web service signing with gpg to notify
 changes so web services can keep accounting.
 
+The web service receives a POST at the configured *url* with a gpg signed
+json containing the following variables:
+
+ * address: btc address
+ * balance: confirmed balance for the address
+ * unconfirmed: unconfirmed balance for the address
+ * timestamp: timestamp for the message
+
 Dependencies:
 ----------------
 

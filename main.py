@@ -161,7 +161,9 @@ class Monitor(obelisk.ObeliskOfLightClient):
         print "balance changed", address, balances, timestamp
         args = {'timestamp': timestamp,
                 'balance': balances[0],
+                # XXX balance2 for backwards compatibility
                 'balance2': balances[1],
+                'unconfirmed': balances[1],
                 'address': address}
         if self.key_id == 'FFFFFFFF':
             print "Configure key_id and url to post to webservice"
