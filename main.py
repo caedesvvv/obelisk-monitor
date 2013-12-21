@@ -57,6 +57,8 @@ class Monitor(obelisk.ObeliskOfLightClient):
         self.naddresses = 0
         self._addresses = {}
         obelisk.ObeliskOfLightClient.__init__(self, *args)
+        if not key_id == 'FFFFFFFF':
+            print "using gpg key", cypher.get_fingerprint(key_id)
         self.file_name = 'addresses.txt'
         self.load_addresses(self.file_name)
 
