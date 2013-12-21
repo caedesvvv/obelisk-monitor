@@ -55,13 +55,15 @@ class Monitor(obelisk.ObeliskOfLightClient):
         self._addresses = {}
         obelisk.ObeliskOfLightClient.__init__(self, *args)
         self.load_config()
-        self.file_name = 'addresses.txt'
         self.load_addresses(self.file_name)
 
 
     ##############################################
-    # Initial history
+    # Configuration
+
     def load_config(self):
+        """Load configuration from config.json"""
+        self.file_name = 'addresses.txt'
         try:
             f = open('config.json')
             config = json.load(f)
