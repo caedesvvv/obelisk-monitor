@@ -29,6 +29,16 @@ def sign_text(text, key_uid):
   
     return signature
 
+def get_fingerprint(key_id):
+    ctx = core.Context()
+
+    ctx.op_keylist_start(key_id, 0)
+    sigkey = ctx.op_keylist_next()
+
+    for subkey in sigkey.subkeys:
+        if subkey.can_sign:
+            return subkey.fpr
+
 def check_signature(text, fingerprint):
     gpg = core.Context()
     plaintext = core.Data()
