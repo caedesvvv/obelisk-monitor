@@ -36,7 +36,7 @@ def get_fingerprint(key_id):
 
     for subkey in sigkey.subkeys:
         if subkey.can_sign:
-            return subkey.fpr
+            return subkey.fpr[-16:]
 
 def check_signature(text, fingerprint):
     gpg = core.Context()
