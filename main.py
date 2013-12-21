@@ -151,7 +151,6 @@ class Monitor(obelisk.ObeliskOfLightClient):
 
     def balance_changed(self, address, balances):
         """Notify external service about changes to an address"""
-        import cypher
         import urllib
         import urllib2
         if balances == [0, 0]:
