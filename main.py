@@ -5,6 +5,7 @@
 # with updates containing confirmed and unconfirmed transactions for each of
 # them.
 
+import sys
 import time
 import json
 
@@ -194,8 +195,10 @@ class Monitor(obelisk.ObeliskOfLightClient):
 if __name__ == '__main__':
     c = Monitor('tcp://85.25.198.97:9091', 'tcp://85.25.198.97:9093')
     # some popular addresses for testing subscription
-    c.subscribe_address("1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp", c.on_address_update)
-    c.subscribe_address("1dice97ECuByXAvqXpaYzSaQuPVvrtmz6", c.on_address_update)
-    c.subscribe_address("1VayNert3x1KzbpzMGt2qdqrAThiRovi8", c.on_address_update)
+    if '--test' in sys.argv:
+        print "Loading test addresses"
+        c.subscribe_address("1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp", c.on_address_update)
+        c.subscribe_address("1dice97ECuByXAvqXpaYzSaQuPVvrtmz6", c.on_address_update)
+        c.subscribe_address("1VayNert3x1KzbpzMGt2qdqrAThiRovi8", c.on_address_update)
     reactor.run()
 
