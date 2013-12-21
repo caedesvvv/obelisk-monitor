@@ -12,6 +12,10 @@ to monitor on each line.
 Provided is a script 'genaddresses.py' you can use to generate
 a list of 10K addresses from an mpk.
 
+Modify the following variables in main.py:
+ * url: url to post for notifications
+ * key_id: key id to use for signing posts
+
 Running main.py will start the monitor.
 
 How it works:
@@ -27,6 +31,7 @@ Dependencies:
 
 * python-twisted-web
 * python-obelisk
+* python-pyme
 
 --
 
