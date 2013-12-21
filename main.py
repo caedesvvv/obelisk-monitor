@@ -7,9 +7,9 @@
 
 import time
 
-import obelisk
-
 from twisted.internet import reactor
+
+import obelisk
 from obelisk.util import to_btc
 
 # post url
