@@ -83,7 +83,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
             self.parse_history(_ec, _history, address)
             if self.naddresses == 0:
                 self.subscribe_addresses(self.file_name)
-            if True: #self.naddresses % 1000 == 0:
+            if self.naddresses % 1000 == 0:
                 print "loaded", 6-self.naddresses, address
             
         self.naddresses += 1
@@ -94,7 +94,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         f = open(file_name, 'r')
         for i, address in enumerate(f.readlines()):
             self.load_address(address.strip())
-            if True: #i%1000 == 0:
+            if i%1000 == 0:
                 print 'loading', i, address
         f.close()
 
@@ -103,7 +103,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         f = open(file_name, 'r')
         for i, address in enumerate(f.readlines()):
             self.subscribe_address(address.strip(), self.on_address_update)
-            if True: # i%1000 == 0:
+            if i%1000 == 0:
                 print 'subscribed', i, address
         f.close()
 
@@ -176,7 +176,7 @@ class Monitor(obelisk.ObeliskOfLightClient):
         print "* tx", hash.encode('hex'), ", ".join(outputs), dir(tx)
  
 if __name__ == '__main__':
-    c = Monitor('tcp://85.25.198.97:8081', 'tcp://85.25.198.97:8083')
+    c = Monitor('tcp://85.25.198.97:9091', 'tcp://85.25.198.97:9093')
     # some popular addresses for testing subscription
     c.subscribe_address("1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp", c.on_address_update)
     c.subscribe_address("1dice97ECuByXAvqXpaYzSaQuPVvrtmz6", c.on_address_update)
