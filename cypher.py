@@ -2,7 +2,6 @@
 Checking gpg signatures
 """
 
-import time
 from pyme import core, constants, errors, pygpgme
 from pyme.constants.sig import mode
 
