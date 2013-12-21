@@ -6,17 +6,13 @@
 # them.
 
 import time
+import json
 
 from twisted.internet import reactor
 
 import obelisk
 from obelisk.util import to_btc
 
-# post url
-url = 'http://localhost:8080/privateapi/update_balance'
-
-# key to sign with
-key_id = 'FFFFFFFF'
 
 # Address History
 class AddressHistory(object):
@@ -57,10 +53,25 @@ class Monitor(obelisk.ObeliskOfLightClient):
         self.naddresses = 0
         self._addresses = {}
         obelisk.ObeliskOfLightClient.__init__(self, *args)
-        if not key_id == 'FFFFFFFF':
-            print "using gpg key", cypher.get_fingerprint(key_id)
+        self.load_config()
         self.file_name = 'addresses.txt'
         self.load_addresses(self.file_name)
+
+
+    ##############################################
+    # Initial history
+    def load_config(self):
+        try:
+            f = open('config.json')
+            config = json.load(f)
+            f.close()
+        except IOError:
+            print "error loading configuration"
+            config = {}
+        self.key_id = str(config.get('key_id', 'FFFFFFFF'))
+        self.url = str(config.get('url', ''))
+        if not self.key_id == 'FFFFFFFF':
+            print "using gpg key", cypher.get_fingerprint(key_id)
 
     ##############################################
     # Initial history
@@ -145,13 +156,13 @@ class Monitor(obelisk.ObeliskOfLightClient):
                 'balance': balances[0],
                 'balance2': balances[1],
                 'address': address}
-        if key_id == 'FFFFFFFF':
+        if self.key_id == 'FFFFFFFF':
             print "Configure key_id and url to post to webservice"
             return
         data = json.dumps(args)
-        signed = cypher.sign_text(data, key_id)
+        signed = cypher.sign_text(data, self.key_id)
         args = urllib.urlencode({'data': signed})
-        req = urllib2.Request(url, args) #, {'Content-Type': 'application/json'})
+        req = urllib2.Request(self.url, args) #, {'Content-Type': 'application/json'})
         try:
             f = urllib2.urlopen(req)
             response = f.read()
